@@ -1,24 +1,22 @@
-# README
+# **DASHBOARD**
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+**DASHBOARD** aims to consolidate the management of multiple applications into a simple interface. 
 
-Things you may want to cover:
+_this is far from production ready_
 
-* Ruby version
+## Caveats
+- This application doesn't have a backend yet.
+  - Everything is stored in the browser localStorage
+  - Settings to not persist across devices or browsers.
 
-* System dependencies
+## Cards
+- Sonarr
+  - List episodes coming in next 7 days
+  - List currently downloading episodes with progress
 
-* Configuration
+## Docker
+```
+docker run -p 8008:80 mrhazel/dashboard
+```
+open [http://localhost:8008](http://localhost:8008)
 
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
