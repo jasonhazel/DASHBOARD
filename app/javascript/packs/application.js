@@ -9,6 +9,7 @@ axios.defaults.headers.common['X-CSRF-Token'] = document.querySelector('meta[nam
 
 
 import './cards/sonarr'
+import './cards/radarr'
 
 const app = () => {
 

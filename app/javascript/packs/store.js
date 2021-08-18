@@ -1,54 +1,61 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import createPersistedState from "vuex-persistedstate";
+import axios from 'axios'
+
 
 Vue.use(Vuex)
 
 const store = new Vuex.Store({
-  plugins: [createPersistedState()],
   state: {
-    applications: {},
-    cards: {},
-    dark: true
+    cards: []
   },
   mutations: {
+    SET_CARDS(state, cards) {
+      Vue.set(state, 'cards', cards)
+    },
     CREATE_CARD(state, card) {
-      Vue.set(state.cards, card.id, card)
+      state.cards.push(card)
+    },
+    UPDATE_CARD(state, card) {
+      let index = state.cards.findIndex(c => c.id == card.id)
+      Vue.set(state.cards, index, card)
     },
     DELETE_CARD(state, card) {
       Vue.delete(state.cards, card.id)
     },
-    SET_DARK(state, dark = false) {
-      state.dark = dark
-    },
-    REGISTER_APPLICATION(state, application) {
-      Vue.set(state.applications, application.id, application)
-    }
   },
   actions: {
+    getCards({ commit }) {
+      axios.get('/cards')
+        .then(response => {
+          commit('SET_CARDS', response.data)
+        }, error => {
+          alert('Error loading cards')
+          console.log(error)
+        })
+        
+    },
     createCard({ commit }, card) {
-      commit('CREATE_CARD', card)
+      axios.post('/cards', { card: { settings: card }})
+        .then(
+          response => commit('CREATE_CARD', response.data), 
+          error => console.log(error)
+        )
+    },
+    updateCard({ commit }, card) {
+      // commit('UPDATE_CARD', card)
+      axios.patch(`/cards/${card.id}`, { card: card })
+        .then(
+          response => commit('UPDATE_CARD', response.data),
+          error => console.log(error)
+        )
     },
     deleteCard({ commit }, card) {
       commit('DELETE_CARD', card)
     },
-    setDark({ commit }, dark = true) {
-      commit('SET_DARK', dark)
-    },
-    toggleDark({ commit, getters }) {
-      return new Promise((resolve) => {
-        commit('SET_DARK', !getters.dark)
-        resolve(getters.dark)
-      })
-    },
-    registerApplication({ commit }, application) {
-      commit('REGISTER_APPLICATION', application)
-    }
   },
   getters: {
     cards: (state) => state.cards,
-    dark: (state) => state.dark,
-    applications: (state) => state.applications
   }
 })
 

@@ -5,14 +5,14 @@
 _this is far from production ready_
 
 ## Caveats
-- This application doesn't have a backend yet.
-  - Everything is stored in the browser localStorage
-  - Settings to not persist across devices or browsers.
+- The backend is only for storing card settings.  API calls to applications are done in the browser.
 
 ## Cards
 - Sonarr
   - List episodes coming in next 7 days
   - List currently downloading episodes with progress
+- Radarr
+  - List movie releases coming in next 30 days
 
 ## Docker
 ```

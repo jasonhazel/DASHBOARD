@@ -5,7 +5,6 @@
         <VIcon>{{ menu ? "mdi-chevron-left-box" : "mdi-cog" }}</VIcon>
       </VAppBarNavIcon>      
       <VSpacer></VSpacer>
-      <VSwitch dense :input-value="$store.getters.dark" v-on:change='toggleDark' class='mt-5'/>
       <VAppBarNavIcon color='primary'>
         <VIcon>mdi-help-circle</VIcon>
       </VAppBarNavIcon>      
@@ -17,7 +16,7 @@
           <VListItem 
             v-for='application in applications' 
             :key='application.id'
-            v-on:click='newCard = application'
+            v-on:click="$emit('new', application)"
           >
             <VListItemTitle>{{ application.name }}</VListItemTitle>
             <VListItemIcon>
@@ -41,41 +40,29 @@
         </VList>
       </template>
     </VNavigationDrawer>
-    <NewCard 
-      v-if="newCard" 
-      :application="newCard" 
-      v-on:closed="newCard = false" 
-    />
   </div>
 </template>
 
 <script>
-import NewCard from './NewCard.vue'
+
+import applications from '../cards'
+
 export default {
-  watch: {
-  },
-  components: {
-    NewCard
-  },
+  components: { },
   props: {
     opened: Boolean
   },
   data: () => ({
-    menu: false,
-    newCard: false
+    menu: false
   }),
   methods: {
     close() {
       this.$emit('close')
     },
-    toggleDark() {
-      this.$store.dispatch('toggleDark')
-        .then(dark => this.$vuetify.theme.dark = dark)
-    }
   },
   computed: {
     applications() {
-      return this.$store.getters.applications
+      return applications
     }
   }
 }

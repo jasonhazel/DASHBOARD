@@ -10,7 +10,7 @@
           </VBtn>
         </VToolbar>
         <VCardText>
-          <Component :is="application.components.form" :card.sync="card" />
+          <Component :is="application.form" :card.sync="card" />
         </VCardText>
         
         <VCardActions>
@@ -38,8 +38,8 @@ export default {
   },
   methods: {
     save() {
-      this.$store.dispatch('createCard', this.card)
-      this.$emit('closed')
+      this.$emit('save', this.card)
+      // this.$emit('closed')
     }
   },
 }

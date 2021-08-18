@@ -1,9 +1,23 @@
 <template>
   <VApp>
-    <Menu />
+    <Menu v-on:new='newCardDialog' />
     <VMain>
-      <Dashboard />
+      <Dashboard v-on:edit='editCardDialog' />
 
+      <!-- kinda hate this right now -->
+      <NewCard 
+        v-if="newCard" 
+        :application="newCard" 
+        v-on:save='saveCard'
+        v-on:closed="newCard = false" 
+      />
+
+      <EditCard
+        v-if="editCard"
+        :card="editCard"
+        v-on:save='updateCard'
+        v-on:closed="editCard = false"
+      />
       
     </VMain>    
   </VApp>
@@ -12,19 +26,42 @@
 <script>
 import Dashboard from './components/Dashboard.vue'
 import Menu from './components/Menu.vue'
+import NewCard from './cards/New.vue'
+import EditCard from './cards/Edit.vue'
 export default {
   methods: {
   },
   components: {
     Menu,
-    Dashboard
+    Dashboard,
+    NewCard,
+    EditCard
   },
   data: function () {
-    return { }
+    return { 
+      newCard: false,
+      editCard: false
+    }
   },
-  created() {
-    this.$vuetify.theme.dark = this.$store.getters.dark
+  mounted() {
+    this.$store.dispatch('getCards')
   },
+  methods: {
+    newCardDialog(application) {
+      this.newCard = application
+    },
+    editCardDialog(card) {
+      this.editCard = card
+    },
+    saveCard(card) {
+      this.$store.dispatch('createCard', card)
+      this.newCard = false
+    },
+    updateCard(card) {
+      this.$store.dispatch('updateCard', card)
+      this.editCard = false
+    }
+  }
 }
 </script>
 

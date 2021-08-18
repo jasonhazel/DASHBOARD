@@ -2,18 +2,15 @@ import API from './api'
 export { API }
 
 import Vue from 'vue'
-import store from '../../store.js'
 
-Vue.component('SonarrCard', () => import('./Card.vue'))
-Vue.component('SonarrForm', () => import('./Form.vue'))
+Vue.component('SonarrCard', () => import('./components/Card.vue'))
+Vue.component('SonarrForm', () => import('./components/Form.vue'))
 
-store.dispatch('registerApplication', {
+export const registration = {
   id: 'sonarr',
   name: 'Sonarr',
   color: '#2193b5',
   icon: require('./icon.png'),
-  components: {
-    card: 'SonarrCard',
-    form: 'SonarrForm'
-  }
-})
+  card: 'SonarrCard',
+  form: 'SonarrForm'
+}

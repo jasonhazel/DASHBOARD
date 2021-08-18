@@ -3,8 +3,7 @@ Rails.application.routes.draw do
 
   root 'application#index'
 
-  
-
+  resources :cards
 
   get '/*path', to: 'application#index'
 end

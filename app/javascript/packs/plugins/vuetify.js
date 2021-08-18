@@ -12,6 +12,7 @@ const opts = {
     iconfont: 'mdiSvg'
   },
   theme: {
+    dark: true,
     options: {
       customProperties: true
     },

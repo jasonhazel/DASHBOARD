@@ -2,7 +2,7 @@
   <VContainer>
     <VRow>
       <VCol v-for="card in cards" :key="card.id" cols='12' sm='6' md='4'>
-        <Component :is="cardComponent(card)" :card="card" />
+        <Component :is="cardComponent(card)" :card="card" v-on='$listeners' />
       </VCol>
     </VRow>
   </VContainer>
@@ -20,7 +20,7 @@ export default {
   }),
   methods: {
     cardComponent(card) {
-      return card.application.components.card
+      return card.settings.application.card
     }
   },
   computed: {

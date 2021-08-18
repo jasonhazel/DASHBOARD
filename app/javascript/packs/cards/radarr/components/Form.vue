@@ -17,7 +17,7 @@
           color='accent' 
           label='URL' 
           required 
-          placeholder="http://localhost:8989"
+          placeholder="http://localhost:7878"
           hint="The bookmark you've been using up until now"
           persistent-hint
         />
@@ -29,7 +29,7 @@
           label='API Key' 
           required 
           placeholder="some-long-string-of-gibberish"
-          hint="From Settings > General in Sonarr"
+          hint="From Settings > General in Radarr"
           persistent-hint
         />
       </VCol>      
