@@ -1,29 +1,22 @@
 const axios = require('axios')
 import { Episode, Download } from './models'
 export default class {
-  constructor(url, apiKey) {
-    this.url = url.replace(/\/$/, '')
-    this.apiKey = apiKey
-
-    this.axios = axios.create({
-      baseURL: `${this.url}/api/`,
-      headers: {
-        'X-Api-Key': this.apiKey
-      }
-    })
+  constructor(card) {
+    this.card = card
   }
 
-  buildURL(endpoint) {
-    return `${endpoint}?apikey=${this.apiKey}`
+  get id() {
+    return this.card.id
   }
 
-  get(endpoint, options = {}) {
-    return this.axios.get(endpoint, { params: options })
+
+  post(endpoint, options = {}) {
+    return axios.post(`/cards/${this.id}/sonarr/${endpoint}`, options )
   }
 
   async systemStatus() {
     try {
-      const response = await this.get('system/status')
+      const response = await this.post('status')
       return response
     } catch (error) {
       return { data: { message: error, version: null } }
@@ -32,7 +25,7 @@ export default class {
 
   async calendar(options = {}) {
     try {
-      const response = await this.get('calendar', options)
+      const response = await this.post('calendar')
       return response.data.map(episode => new Episode(episode))
     } catch (error) {
       return { data: { message: error, version: null } }
@@ -41,7 +34,7 @@ export default class {
 
   async queue() {
     try {
-      const response = await this.get('queue')
+      const response = await this.post('queue')
       return response.data.map(download => new Download(download))
     } catch (error) {
       console.log(error)

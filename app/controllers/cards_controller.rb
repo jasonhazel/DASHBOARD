@@ -22,7 +22,14 @@ class CardsController < ApplicationController
     end
   end
 
-
+  def destroy
+    card = Card.find(params[:id])
+    if card.destroy
+      render json: card, status: :ok
+    else
+      render json: { errors: card.errors }, status: :unprocessable_entity
+    end
+  end
 
   private
   def permitted_params

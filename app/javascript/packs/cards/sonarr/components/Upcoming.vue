@@ -1,7 +1,7 @@
 <template>
   <div>
     <VSubheader>Upcoming</VSubheader>
-    <VSlideGroup show-arrows='always' ref='upcoming'>
+    <VSlideGroup show-arrows='always' ref='slider'>
       <VSlideItem v-for="episode in calendar" :key="episode.id" >
         <VTooltip right>
           <template v-slot:activator="{ on, attrs }">
@@ -22,8 +22,18 @@
 
 <script>
 export default {
+  methods: {
+  },
   props: {
-    calendar: Array
+    calendar: Array,
+    opened: Boolean
+  },
+  watch: {
+    opened(val) {
+      if (val) {
+        this.$refs.slider.setWidths()
+      }
+    }
   }
 }
 </script>

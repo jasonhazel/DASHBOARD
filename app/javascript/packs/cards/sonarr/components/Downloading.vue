@@ -1,7 +1,7 @@
 <template>
   <div>
     <VSubheader>Downloading</VSubheader>
-    <VSlideGroup show-arrows='always' :center-active='true' ref='downloading'>
+    <VSlideGroup show-arrows='always' :center-active='true' ref='slider'>
       <VSlideItem  v-if="queue.length == 0">
         <div style="width: 100%" class='grey--text text-overline text-center'>Nothing Queued</div>
       </VSlideItem>
@@ -40,6 +40,29 @@
 
 <script>
 export default {
-  props: { queue: Array }
+  props: { queue: Array, opened: Boolean },
+  watch: {
+    opened(val) {
+      if (val) {
+        this.$refs.slider.setWidths()
+      }
+    }
+  },
+  methods: {
+    downloadColor(download) {
+
+      switch(download.status) {
+        case 'paused':
+          return 'orange'
+        case 'downloading':
+          return 'green'
+        case 'completed':
+          return download.trackedStatus == 'warning' ? 'orange' : 'primary'
+        default:
+          return 'primary'
+      }
+    }
+  }
+
 }
 </script>

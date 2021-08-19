@@ -15,8 +15,8 @@
     <VDivider />
     <VExpandTransition>
       <VSheet v-show="expand" color='secondary' class='pb-4'>
-        <Upcoming :calendar="sonarr.calendar" />
-        <Downloading :queue="sonarr.queue" />
+        <Upcoming :calendar="sonarr.calendar" :opened='expand' />
+        <Downloading :queue="sonarr.queue"  :opened='expand' />
         <VCardActions>
           <VSpacer />
 
@@ -29,8 +29,6 @@
 
 <script>
 import { API as Sonarr } from '..'
-import addDays from 'date-fns/addDays'
-import format from 'date-fns/format'
 
 import Upcoming from './Upcoming.vue'
 import Downloading from './Downloading.vue'
@@ -49,69 +47,46 @@ export default {
         calendar: [],
         queue:    []
       },
-      interval: null
+      intervals: []
     }
   },
   watch: {
-    // this is a hack to get the sliders to work right
-    // things seem to be working at the moment without it.
-    // 🤞
-    // expand(val) {
-    //   if (val) {
-    //     this.$refs.upcoming.setWidths()
-    //     this.$refs.downloading.setWidths()
-    //   }
-    // }
-    edit(newVal) {
-      // this.expand = !newVal
-    }
+
   },
   created() {
-    this.api = new Sonarr(this.url, this.card.settings.apiKey)
+    this.api = new Sonarr(this.card)
     this.start()    
   },
   destroyed() {
-    clearInterval(this.interval)
+    // clearInterval(this.interval)
+    this.intervals.forEach(i => clearInterval(i))
   },
   methods: {
     start() {
-      this.interval = setInterval(this.process, this.refresh)
-      this.process()
-    },
-    process() {
-      let now = new Date()
+      this.intervals.push(setInterval(this.status, 30000))
+      this.status()
 
+      this.intervals.push(setInterval(this.calendar, 60000))
+      this.calendar()
+
+      this.intervals.push(setInterval(this.queue, 60000))
+      this.queue()      
+    },
+    status() {
       this.api.systemStatus()
         .then(response => this.sonarr.status = response.data)
-
-      let options = {
-        start: format(now, 'yyyy-MM-dd'),
-        end: format(addDays(now, 7), 'yyyy-MM-dd')
-      }
-
-      this.api.calendar(options)
-        .then(response => this.sonarr.calendar = response)
-
-      this.api.queue().then(response => this.sonarr.queue = response)
     },
-
-
+    calendar() {
+      this.api.calendar()
+        .then(response => this.sonarr.calendar = response)
+    },
+    queue() {
+      this.api.queue()
+        .then(response => this.sonarr.queue = response)
+    },
     openTo(path = '', target = '_blank') {
       let url = `${this.url}/${path}`
       window.open(url, target)
-    },
-    downloadColor(download) {
-
-      switch(download.status) {
-        case 'paused':
-          return 'orange'
-        case 'downloading':
-          return 'green'
-        case 'completed':
-          return download.trackedStatus == 'warning' ? 'orange' : 'primary'
-        default:
-          return 'primary'
-      }
     }
   },
   computed: {

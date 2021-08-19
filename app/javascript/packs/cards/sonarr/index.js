@@ -9,7 +9,6 @@ Vue.component('SonarrForm', () => import('./components/Form.vue'))
 export const registration = {
   id: 'sonarr',
   name: 'Sonarr',
-  color: '#2193b5',
   icon: require('./icon.png'),
   card: 'SonarrCard',
   form: 'SonarrForm'
