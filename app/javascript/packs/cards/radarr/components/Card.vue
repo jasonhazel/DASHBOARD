@@ -35,46 +35,36 @@ export default {
   components: { Upcoming },
   data() {
     return {
-      api:      null,
-      refresh: 30000,
-      expand:   false, 
+      api:      new Radarr(this.card),
+      expand:   true, 
       radarr: { 
         status:   { version: null },
         calendar: [],
         queue:    []
       },
-      interval: null
+      intervals:  []
     }
   },
   watch: {
   },
   created() {
-    this.api = new Radarr(this.url, this.card.settings.apiKey)
-    this.start()    
+    this.intervals.push(setInterval(this.status, 10000))
+    this.status()
+    
+    this.intervals.push(setInterval(this.calendar, 10000))
+    this.calendar()
   },
   destroyed() {
-    clearInterval(this.interval)
+    this.intervals.forEach(i => clearInterval(i))
   },
   methods: {
-    start() {
-      this.interval = setInterval(this.process, this.refresh)
-      this.process()
-    },
-    process() {
-      let now = new Date()
-
+    status() {
       this.api.systemStatus()
         .then(response => this.radarr.status = response.data)
-
-      let options = {
-        start: format(now, 'yyyy-MM-dd'),
-        end: format(addDays(now, 30), 'yyyy-MM-dd')
-      }
-
-      this.api.calendar(options)
-        .then(response => this.radarr.calendar = response.filter(m => !m.downloaded))
-
-      // this.api.queue().then(response => this.radarr.queue = response)
+    },
+    calendar() {
+      this.api.calendar()
+        .then(response => this.radarr.calendar = response)
     },
 
 

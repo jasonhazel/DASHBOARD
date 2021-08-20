@@ -1,4 +1,4 @@
-class SonarrCard 
+class RadarrCard 
   def initialize(settings) 
     @settings = settings.symbolize_keys
   end
@@ -13,6 +13,6 @@ class SonarrCard
   end
 
   def url(endpoint)
-    "#{@settings[:url].chomp('/')}/api/#{endpoint}"
+    "#{@settings[:url].chomp('/')}/api/v3/#{endpoint}"
   end
 end

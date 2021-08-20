@@ -23,6 +23,10 @@ export default class {
     return this.airDate()
   }
 
+  get downloaded() {
+    return this.episode.hasFile
+  }
+
   get number() {
     return `S${this.episode.seasonNumber}E${this.episode.episodeNumber}`
   }
@@ -37,7 +41,7 @@ export default class {
   }
 
   get url() {
-    return this.series.url
+    return `${this.series.url}`
   }
 
   image(type = 'poster') {

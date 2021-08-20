@@ -18,12 +18,16 @@ export default class {
     return this.movie.title
   }
 
-  get releaseType() {
-
+  get dates() {
+    return [
+      { type: 'digitalRelease',   value: this.movie.digitalRelease },
+      { type: 'inCinemas',        value: this.movie.inCinemas },
+      { type: 'physicalRelease',  value: this.movie.physicalRelease }
+    ]
   }
 
   get downloaded() {
-    return 'movieFile' in this.movie
+    return this.movie.hasFile
   }
 
   airDate(display = 'EEEE K:mmaaaaa') {

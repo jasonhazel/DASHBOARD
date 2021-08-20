@@ -2,31 +2,30 @@
   <div>
     <VSubheader>Upcoming</VSubheader>
     <VSlideGroup show-arrows='always' ref='slider'>
-      <VSlideItem v-for="episode in calendar" :key="episode.id" >
-        <VTooltip right>
-          <template v-slot:activator="{ on, attrs }">
-            <a v-bind="attrs" v-on="on" v-on:click.prevent="openTo(episode.url)" target="_blank">
-              <VAvatar size='40' class="mr-3" >
-                <VImg :src="episode.poster"  />
-              </VAvatar>
-            </a>
-          </template>
-          <div><strong>{{ episode.shortAirDate }}</strong></div>
-          <div>{{ episode.seriesTitle }}</div>
-          <div>{{ episode.title }} ({{ episode.number }})</div>
-        </VTooltip>
-      </VSlideItem>
+      <template v-for="episode in calendar"> 
+        <VSlideItem v-if="!episode.downloaded" :key="episode.id" >
+          <Episode :calendar='episode' v-on='$listeners' />
+        </VSlideItem>
+      </template>
     </VSlideGroup>
   </div>
 </template>
 
 <script>
+import Episode from './Episode.vue'
 export default {
-  methods: {
+  data () {
+    return {
+    }
+  },
+  components: {
+    Episode
   },
   props: {
     calendar: Array,
     opened: Boolean
+  },
+  methods: {
   },
   watch: {
     opened(val) {

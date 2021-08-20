@@ -23,10 +23,10 @@ export default class {
     }
   }
 
-  async calendar(options = {}) {
+  async calendar() {
     try {
       const response = await this.post('calendar')
-      return response.data.map(episode => new Episode(episode))
+      return response.data
     } catch (error) {
       return { data: { message: error, version: null } }
     }
@@ -35,7 +35,7 @@ export default class {
   async queue() {
     try {
       const response = await this.post('queue')
-      return response.data.map(download => new Download(download))
+      return response.data
     } catch (error) {
       console.log(error)
       return { data: { message: error, version: null } }

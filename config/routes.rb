@@ -9,8 +9,13 @@ Rails.application.routes.draw do
       post :calendar, to: 'sonarr#calendar'
       post :queue,    to: 'sonarr#queue'
     end
+    namespace :cards, path: 'radarr' do
+      post :status,   to: 'radarr#status'
+      post :calendar, to: 'radarr#calendar'
+      post :queue,    to: 'radarr#queue'
+    end
 
   end
 
-  # get '/*path', to: 'application#index'
+  get '/*path', to: 'application#index'
 end

@@ -2,7 +2,7 @@
   <VCard tile color='primary' flat>
     <VCardTitle style="cursor:pointer" v-on:click='expand = !expand' class='pa-3'>
       <VBadge dot :color='onlineColor' overlap class='mr-2'>
-        <VAvatar size='34'  v-on:click.stop="openTo()">
+        <VAvatar size='34'  v-on:click.stop="openTo(card.settings.url)">
           <VImg :src="require('../icon.png')"  />
         </VAvatar>
       </VBadge>
@@ -15,8 +15,16 @@
     <VDivider />
     <VExpandTransition>
       <VSheet v-show="expand" color='secondary' class='pb-4'>
-        <Upcoming :calendar="sonarr.calendar" :opened='expand' />
-        <Downloading :queue="sonarr.queue"  :opened='expand' />
+        <Upcoming 
+          :calendar="sonarr.calendar" 
+          :opened='expand' 
+          v-on:click='openTo'
+        />
+        <Downloading 
+          :queue="sonarr.queue"
+          :opened='expand'
+          v-on:click='openTo'
+        />
         <VCardActions>
           <VSpacer />
 
@@ -40,7 +48,7 @@ export default {
     return {
       api:      null,
       refresh:  30000,
-      expand:   false, 
+      expand:   true, 
       edit:     false,
       sonarr: { 
         status:   { version: null },
@@ -58,18 +66,17 @@ export default {
     this.start()    
   },
   destroyed() {
-    // clearInterval(this.interval)
     this.intervals.forEach(i => clearInterval(i))
   },
   methods: {
     start() {
-      this.intervals.push(setInterval(this.status, 30000))
+      this.intervals.push(setInterval(this.status, 10000))
       this.status()
 
-      this.intervals.push(setInterval(this.calendar, 60000))
+      this.intervals.push(setInterval(this.calendar, 10000))
       this.calendar()
 
-      this.intervals.push(setInterval(this.queue, 60000))
+      this.intervals.push(setInterval(this.queue, 10000))
       this.queue()      
     },
     status() {
@@ -84,9 +91,8 @@ export default {
       this.api.queue()
         .then(response => this.sonarr.queue = response)
     },
-    openTo(path = '', target = '_blank') {
-      let url = `${this.url}/${path}`
-      window.open(url, target)
+    openTo(url, target = '_blank') {
+      window.open(`${this.url}/${url}`, target)
     }
   },
   computed: {
