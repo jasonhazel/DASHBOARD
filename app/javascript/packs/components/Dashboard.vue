@@ -5,10 +5,12 @@
         <Component :is="cardComponent(card)" :card="card" v-on='$listeners' />
       </VCol>
     </VRow>
+    
   </VContainer>
 </template>
 
 <script>
+
 export default {
   created () {
   },

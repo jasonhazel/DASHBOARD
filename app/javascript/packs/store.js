@@ -21,7 +21,8 @@ const store = new Vuex.Store({
       Vue.set(state.cards, index, card)
     },
     DELETE_CARD(state, card) {
-      Vue.delete(state.cards, card.id)
+      let index = state.cards.findIndex(c => c.id == card.id)
+      Vue.delete(state.cards, index)
     },
   },
   actions: {
@@ -43,7 +44,6 @@ const store = new Vuex.Store({
         )
     },
     updateCard({ commit }, card) {
-      // commit('UPDATE_CARD', card)
       axios.patch(`/cards/${card.id}`, { card: card })
         .then(
           response => commit('UPDATE_CARD', response.data),
@@ -51,7 +51,11 @@ const store = new Vuex.Store({
         )
     },
     deleteCard({ commit }, card) {
-      commit('DELETE_CARD', card)
+      axios.delete(`/cards/${card.id}`)
+        .then(
+          response => commit('DELETE_CARD', response.data),
+          error => console.log(error)
+        )
     },
   },
   getters: {

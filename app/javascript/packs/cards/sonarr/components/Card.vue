@@ -2,33 +2,35 @@
   <VCard tile color='primary' flat>
     <VCardTitle style="cursor:pointer" v-on:click='expand = !expand' class='pa-3'>
       <VBadge dot :color='onlineColor' overlap class='mr-2'>
-        <VAvatar size='34'  v-on:click.stop="openTo(card.settings.url)">
+        <VAvatar size='32'  v-on:click.stop="openTo(card.settings.url)">
           <VImg :src="require('../icon.png')"  />
         </VAvatar>
       </VBadge>
       {{ card.settings.name || card.settings.application.name }}
       <VSpacer />
+
       <div v-show='expand'>
         <VBtn icon v-on:click.stop="$emit('edit', card)"><VIcon>mdi-cog</VIcon></VBtn>
       </div>
+      <div v-show="!expand">
+        <Downloading :queue="queue" v-on:click='openTo' short />
+      </div>
+
     </VCardTitle>
     <VDivider />
     <VExpandTransition>
       <VSheet v-show="expand" color='secondary' class='pb-4'>
         <Upcoming 
-          :calendar="sonarr.calendar" 
+          :calendar="calendar" 
           :opened='expand' 
           v-on:click='openTo'
         />
-        <Downloading 
-          :queue="sonarr.queue"
+
+        <Downloading
+          :queue="queue"
           :opened='expand'
           v-on:click='openTo'
         />
-        <VCardActions>
-          <VSpacer />
-
-        </VCardActions>
       </VSheet>
     </VExpandTransition>    
   
@@ -46,16 +48,13 @@ export default {
   components: { Upcoming, Downloading },
   data() {
     return {
-      api:      null,
-      refresh:  30000,
-      expand:   true, 
-      edit:     false,
-      sonarr: { 
-        status:   { version: null },
-        calendar: [],
-        queue:    []
-      },
-      intervals: []
+      api:        null,
+      expand:     false, 
+      edit:       false,
+      status:     { version: null },
+      calendar:   [],
+      queue:      [],
+      intervals:  []
     }
   },
   watch: {
@@ -70,26 +69,26 @@ export default {
   },
   methods: {
     start() {
-      this.intervals.push(setInterval(this.status, 10000))
-      this.status()
+      this.intervals.push(setInterval(this.getStatus, 10000))
+      this.getStatus()
 
-      this.intervals.push(setInterval(this.calendar, 10000))
-      this.calendar()
+      this.intervals.push(setInterval(this.getCalendar, 10000))
+      this.getCalendar()
 
-      this.intervals.push(setInterval(this.queue, 10000))
-      this.queue()      
+      this.intervals.push(setInterval(this.getQueue, 10000))
+      this.getQueue()      
     },
-    status() {
+    getStatus() {
       this.api.systemStatus()
-        .then(response => this.sonarr.status = response.data)
+        .then(response => this.status = response.data)
     },
-    calendar() {
+    getCalendar() {
       this.api.calendar()
-        .then(response => this.sonarr.calendar = response)
+        .then(response => this.calendar = response)
     },
-    queue() {
+    getQueue() {
       this.api.queue()
-        .then(response => this.sonarr.queue = response)
+        .then(response => this.queue = response)
     },
     openTo(url, target = '_blank') {
       window.open(`${this.url}/${url}`, target)
@@ -100,7 +99,7 @@ export default {
       return this.card.settings.url.replace(/\/$/, '')
     },
     online() {
-      return this.sonarr.status.version != null
+      return this.status.version != null
     },
     onlineColor() {
       return this.online ? 'green' : 'red'

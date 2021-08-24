@@ -3,18 +3,14 @@ Rails.application.routes.draw do
 
   root 'application#index'
 
+  # resources :calendar
+
   resources :cards do
     namespace :cards, path: 'sonarr' do
       post :status,   to: 'sonarr#status'
       post :calendar, to: 'sonarr#calendar'
       post :queue,    to: 'sonarr#queue'
     end
-    namespace :cards, path: 'radarr' do
-      post :status,   to: 'radarr#status'
-      post :calendar, to: 'radarr#calendar'
-      post :queue,    to: 'radarr#queue'
-    end
-
   end
 
   get '/*path', to: 'application#index'

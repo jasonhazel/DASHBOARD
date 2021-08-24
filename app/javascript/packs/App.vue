@@ -17,6 +17,7 @@
         :card="editCard"
         v-on:save='updateCard'
         v-on:closed="editCard = false"
+        v-on:delete='deleteCard'
       />
       
     </VMain>    
@@ -59,6 +60,10 @@ export default {
     },
     updateCard(card) {
       this.$store.dispatch('updateCard', card)
+      this.editCard = false
+    },
+    deleteCard(card) {
+      this.$store.dispatch('deleteCard', card)
       this.editCard = false
     }
   }

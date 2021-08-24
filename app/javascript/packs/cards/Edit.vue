@@ -14,6 +14,7 @@
         </VCardText>
         
         <VCardActions>
+          <VBtn color='red' text v-on:click="deleteCard">Delete</VBtn>
           <VSpacer />
           <VBtn text v-on:click="$emit('closed')">Close</VBtn>
           <VBtn text type='submit'>Save</VBtn>
@@ -34,6 +35,10 @@ export default {
   methods: {
     save() {
       this.$emit('save', this.card)
+    },
+    deleteCard() {
+      if (confirm('Are you sure you want to delete this card?'))
+        this.$emit('delete', this.card)
     }
   },
 }

@@ -4,16 +4,9 @@
 
 _this is far from production ready_
 
-## Caveats
-- The backend is only for storing card settings.  API calls to applications are done in the browser.
+## Stack
 
-## Cards
-- Sonarr
-  - List episodes coming in next 7 days
-  - List currently downloading episodes with progress
-- Radarr
-  - List movie releases coming in next 30 days
-
+Rails, Sqlite, VueJS
 ## Docker
 ```
 docker run -p 8008:80 mrhazel/dashboard

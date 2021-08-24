@@ -1,5 +1,4 @@
 const axios = require('axios')
-import { Episode, Download } from './models'
 export default class {
   constructor(card) {
     this.card = card
@@ -8,7 +7,6 @@ export default class {
   get id() {
     return this.card.id
   }
-
 
   post(endpoint, options = {}) {
     return axios.post(`/cards/${this.id}/sonarr/${endpoint}`, options )

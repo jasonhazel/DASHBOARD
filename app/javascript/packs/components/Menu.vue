@@ -2,12 +2,17 @@
   <div>
     <VAppBar app color='background' dense flat>
       <VAppBarNavIcon color='primary' v-on:click="menu = !menu">
-        <VIcon>{{ menu ? "mdi-chevron-left-box" : "mdi-cog" }}</VIcon>
+        <VIcon>{{ menu ? "mdi-chevron-left-box" : "mdi-menu" }}</VIcon>
       </VAppBarNavIcon>      
-      <VSpacer></VSpacer>
-      <VAppBarNavIcon color='primary'>
-        <VIcon>mdi-help-circle</VIcon>
-      </VAppBarNavIcon>      
+      <slot>
+        <VToolbarTitle>
+          DVRR
+        </VToolbarTitle>
+        <VSpacer></VSpacer>
+        <VAppBarNavIcon color='primary'>
+          <VIcon>mdi-help-circle</VIcon>
+        </VAppBarNavIcon>      
+      </slot>
     </VAppBar>
     <VNavigationDrawer left app v-model='menu'>
       <VList nav >
@@ -31,10 +36,10 @@
         <VList nav >
           <VListItemGroup>
             <VListItem>
+              <VListItemTitle>Settings</VListItemTitle>
               <VListItemIcon>
                 <VIcon>mdi-cog</VIcon>
               </VListItemIcon>
-              <VListItemTitle>Settings</VListItemTitle>
             </VListItem>          
           </VListItemGroup>
         </VList>

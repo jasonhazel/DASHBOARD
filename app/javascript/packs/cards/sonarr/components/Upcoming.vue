@@ -3,8 +3,12 @@
     <VSubheader>Upcoming</VSubheader>
     <VSlideGroup show-arrows='always' ref='slider'>
       <template v-for="episode in calendar"> 
-        <VSlideItem v-if="!episode.downloaded" :key="episode.id" >
-          <Episode :calendar='episode' v-on='$listeners' />
+        <VSlideItem  :key="episode.id">
+          <Episode :episode='episode' v-on='$listeners'>
+            <div><strong>{{ formatDate(episode.date, 'MMMM do K:mmaaaaa') }}</strong></div>
+            <div>{{ episode.series }}</div>
+            <div>{{ episode.title }} ({{ episode.number }})</div>
+          </Episode>
         </VSlideItem>
       </template>
     </VSlideGroup>
