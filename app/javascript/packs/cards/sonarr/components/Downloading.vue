@@ -9,9 +9,10 @@
         </Episode>
       </template>
     </div>
-    <div v-else>
+    <div v-else-if="queue.length > 0">
       <VSubheader>Downloading</VSubheader>
       <VSlideGroup show-arrows='always' ref='slider'>
+
         <template v-for="episode in queue"> 
           <VSlideItem  :key="episode.id">
             <Episode :episode='episode' v-on='$listeners'>
